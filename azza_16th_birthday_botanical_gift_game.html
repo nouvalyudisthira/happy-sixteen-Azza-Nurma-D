@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Little Garden of Wishes - For Azza Nurma D</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Caveat:wght@500;600;700&family=Cinzel:wght@500;600;700;800&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sage: {
+                            50: '#F5F7F4',
+                            100: '#E8EFE7',
+                            200: '#CBD9CA',
+                            300: '#AEC2AC',
+                            400: '#90A98E',
+                            500: '#738F71',
+                            600: '#5A7358',
+                            700: '#435641',
+                            800: '#2C3A2B',
+                            900: '#172016',
+                        },
+                        cream: '#FAF7F0',
+                        warmPaper: '#F6F2E9',
+                        goldAccent: '#D4AF37',
+                        goldLight: '#F3E5AB'
+                    },
+                    fontFamily: {
+                        serifTitle: ['"Playfair Display"', 'serif'],
+                        cursive: ['"Alex Brush"', 'cursive'],
+                        handwriting: ['"Caveat"', 'cursive'],
+                        cinzel: ['"Cinzel"', 'serif'],
+                        body: ['"Montserrat"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: #EAF0E8;
+            min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .bg-pattern {
+            position: fixed;
+            inset: 0;
+            background-color: #E8EFE6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(144, 169, 142, 0.25) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(90, 115, 88, 0.2) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(254, 253, 249, 0.6) 0%, transparent 70%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 200 200'%3E%3Cpath d='M30,50 Q45,20 70,35 Q95,50 110,20 C125,50 150,40 160,70 C130,85 110,65 80,90 Q50,70 30,50 Z' fill='none' stroke='%23738F71' stroke-width='0.6' opacity='0.18'/%3E%3Ccircle cx='60' cy='40' r='5' fill='none' stroke='%235A7358' stroke-width='0.5' opacity='0.15'/%3E%3Cpath d='M140,120 Q160,100 180,130 Q150,160 120,140 Q130,110 140,120 Z' fill='none' stroke='%23738F71' stroke-width='0.6' opacity='0.18'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .watercolor-frame {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        #petalCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 99;
+        }
+
+        .botanical-card {
+            background: linear-gradient(145deg, rgba(250, 247, 240, 0.96) 0%, rgba(246, 242, 233, 0.92) 100%);
+            box-shadow: 
+                0 20px 40px rgba(15, 25, 14, 0.25),
+                0 8px 16px rgba(0, 0, 0, 0.08),
+                inset 0 0 0 1.5px rgba(212, 175, 55, 0.35),
+                inset 0 0 20px rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            position: relative;
+        }
+
+        .gold-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+        .gold-shimmer::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(60deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
+            transform: rotate(30deg);
+            animation: shimmerEffect 6s infinite;
+            pointer-events: none;
+        }
+        @keyframes shimmerEffect {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            20%, 100% { transform: translateX(100%) rotate(30deg); }
+        }
+
+        .corner-svg {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            pointer-events: none;
+            z-index: 10;
+        }
+        @media (min-width: 640px) {
+            .corner-svg {
+                width: 100px;
+                height: 100px;
+            }
+        }
+        .tl { top: -4px; left: -4px; }
+        .tr { top: -4px; right: -4px; transform: scaleX(-1); }
+        .bl { bottom: -4px; left: -4px; transform: scaleY(-1); }
+        .br { bottom: -4px; right: -4px; transform: scale(-1, -1); }
+
+        .page-transition {
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .page-hidden {
+            opacity: 0;
+            transform: translateY(16px) scale(0.98);
+            pointer-events: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+        .page-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            position: relative;
+            z-index: 20;
+        }
+
+        @keyframes goldPulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.5), 0 0 30px rgba(115, 143, 113, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.8), 0 0 45px rgba(115, 143, 113, 0.7); }
+        }
+        .pulse-unlock {
+            animation: goldPulse 2.5s infinite;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(1.5deg); }
+        }
+        .float-anim {
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
+
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: rgba(232, 239, 231, 0.4); }
+        ::-webkit-scrollbar-thumb { background: #738F71; border-radius: 4px; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-2 sm:p-4 md:p-6 text-sage-900 selection:bg-goldLight selection:text-sage-900">
+
+<!-- Floating Music Player Control -->
+<div class="fixed bottom-4 right-4 z-50">
+    <button id="musicToggleBtn" onclick="toggleMusic(event)" class="w-12 h-12 bg-white/90 backdrop-blur-md border border-goldAccent/50 rounded-full shadow-xl flex items-center justify-center text-sage-800 text-lg active:scale-95 transition-transform">
+        <i id="musicIcon" class="fa-solid fa-music text-goldAccent"></i>
+    </button>
+</div>
+
+<!-- Hidden Audio Element -->
+<audio id="bgMusic" loop preload="auto">
+    <source src="audio/Stephanie_Poetri_-_I_Love_You_3000.mp3" type="audio/mpeg">
+</audio>
+
+<div class="bg-pattern"></div>
+
+<svg class="watercolor-frame opacity-40 sm:opacity-90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1200 800">
+    <defs>
+        <filter id="watercolorBlur" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="18"/>
+        </filter>
+        
+        <g id="goldGlitterGroup">
+            <circle cx="0" cy="0" r="2.5" fill="#D4AF37"/>
+            <circle cx="8" cy="-6" r="1.5" fill="#F3E5AB"/>
+            <circle cx="-10" cy="12" r="2" fill="#D4AF37"/>
+            <circle cx="15" cy="8" r="1.2" fill="#F3E5AB"/>
+            <circle cx="-6" cy="-14" r="2" fill="#AA820A"/>
+            <circle cx="20" cy="-10" r="1" fill="#FFF"/>
+        </g>
+
+        <g id="watercolorBranch">
+            <path d="M0,0 Q60,40 140,30 Q200,20 260,60" fill="none" stroke="#5C4033" stroke-width="3" stroke-linecap="round"/>
+            <path d="M30,18 Q55,-10 80,15 Q55,30 30,18" fill="#2D4A27" opacity="0.9"/>
+            <path d="M70,32 Q100,5 125,35 Q95,50 70,32" fill="#4B6B43" opacity="0.88"/>
+            <path d="M120,28 Q150,-15 180,22 Q150,45 120,28" fill="#738F71" opacity="0.85"/>
+            <path d="M170,38 Q205,10 230,45 Q195,60 170,38" fill="#385333" opacity="0.9"/>
+            <path d="M210,48 Q240,25 265,55 Q235,70 210,48" fill="#90A98E" opacity="0.85"/>
+        </g>
+    </defs>
+
+    <ellipse cx="100" cy="100" rx="220" ry="180" fill="#90A98E" opacity="0.45" filter="url(#watercolorBlur)"/>
+    <ellipse cx="1100" cy="120" rx="240" ry="190" fill="#738F71" opacity="0.4" filter="url(#watercolorBlur)"/>
+    <ellipse cx="120" cy="700" rx="250" ry="200" fill="#5A7358" opacity="0.4" filter="url(#watercolorBlur)"/>
+    <ellipse cx="1080" cy="680" rx="260" ry="210" fill="#90A98E" opacity="0.45" filter="url(#watercolorBlur)"/>
+
+    <use href="#watercolorBranch" x="-20" y="-10" transform="rotate(25)" />
+    <use href="#watercolorBranch" x="40" y="-30" transform="scale(0.8) rotate(60)" />
+
+    <g transform="translate(1200, 0) scale(-1, 1)">
+        <use href="#watercolorBranch" x="-20" y="-10" transform="rotate(20)" />
+        <use href="#watercolorBranch" x="50" y="-20" transform="scale(0.85) rotate(55)" />
+    </g>
+
+    <g transform="translate(0, 800) scale(1, -1)">
+        <use href="#watercolorBranch" x="-30" y="-10" transform="rotate(30)" />
+    </g>
+
+    <g transform="translate(1200, 800) scale(-1, -1)">
+        <use href="#watercolorBranch" x="-20" y="-20" transform="rotate(25)" />
+    </g>
+
+    <use href="#goldGlitterGroup" x="180" y="140" transform="scale(1.5)"/>
+    <use href="#goldGlitterGroup" x="320" y="80" transform="scale(1.2)"/>
+    <use href="#goldGlitterGroup" x="1000" y="130" transform="scale(1.6)"/>
+    <use href="#goldGlitterGroup" x="880" y="90" transform="scale(1.3)"/>
+    <use href="#goldGlitterGroup" x="200" y="680" transform="scale(1.4)"/>
+    <use href="#goldGlitterGroup" x="1020" y="660" transform="scale(1.5)"/>
+</svg>
+
+<canvas id="petalCanvas"></canvas>
+
+<!-- MAIN APP CONTAINER -->
+<main class="w-full max-w-5xl my-2 sm:my-6 relative z-20">
+
+    <!-- STAGE 0: DASHBOARD & COUNTDOWN -->
+    <div id="stage0" class="page-transition page-visible">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-stretch">
+            
+            <div class="lg:col-span-7 botanical-card gold-shimmer rounded-2xl sm:rounded-3xl p-4 sm:p-8 text-center flex flex-col justify-between overflow-hidden">
+                
+                <svg class="corner-svg tl" viewBox="0 0 100 100">
+                    <path d="M 0,0 L 45,0 C 35,20 20,25 0,45 Z" fill="#738F71" opacity="0.3"/>
+                    <circle cx="28" cy="28" r="14" fill="#E8EFE7"/>
+                    <path d="M 0 0 C 35 12, 45 35, 45 65 C 25 45, 12 35, 0 0" fill="#5A7358"/>
+                </svg>
+                <svg class="corner-svg tr" viewBox="0 0 100 100">
+                    <path d="M 0,0 L 45,0 C 35,20 20,25 0,45 Z" fill="#738F71" opacity="0.3"/>
+                    <circle cx="28" cy="28" r="14" fill="#E8EFE7"/>
+                    <path d="M 0 0 C 35 12, 45 35, 45 65 C 25 45, 12 35, 0 0" fill="#5A7358"/>
+                </svg>
+                <svg class="corner-svg bl" viewBox="0 0 100 100">
+                    <path d="M 0,0 L 45,0 C 35,20 20,25 0,45 Z" fill="#738F71" opacity="0.3"/>
+                    <circle cx="28" cy="28" r="14" fill="#E8EFE7"/>
+                    <path d="M 0 0 C 35 12, 45 35, 45 65 C 25 45, 12 35, 0 0" fill="#5A7358"/>
+                </svg>
+                <svg class="corner-svg br" viewBox="0 0 100 100">
+                    <path d="M 0,0 L 45,0 C 35,20 20,25 0,45 Z" fill="#738F71" opacity="0.3"/>
+                    <circle cx="28" cy="28" r="14" fill="#E8EFE7"/>
+                    <path d="M 0 0 C 35 12, 45 35, 45 65 C 25 45, 12 35, 0 0" fill="#5A7358"/>
+                </svg>
+
+                <div class="relative z-10 pt-1 sm:pt-2">
+                    <p class="font-cinzel text-[10px] sm:text-xs tracking-[0.2em] sm:tracking-[0.35em] uppercase text-sage-600 mb-1 sm:mb-2 flex items-center justify-center gap-1.5 sm:gap-2 font-semibold">
+                        <span>✧</span> A LITTLE SOMETHING FOR YOU <span>✧</span>
+                    </p>
+                    
+                    <h1 class="font-serifTitle text-3xl sm:text-5xl md:text-6xl text-sage-900 font-extrabold tracking-tight my-1 sm:my-2 drop-shadow-sm">
+                        For Azza<br/><span class="italic text-sage-700 font-normal">Nurma D</span>
+                    </h1>
+
+                    <div class="text-xl sm:text-2xl text-goldAccent my-0.5 sm:my-1 font-cursive font-bold">
+                        ~ ❤️ ~
+                    </div>
+
+                    <h2 class="font-serifTitle italic text-base sm:text-2xl text-sage-700 font-medium mb-2 sm:mb-3">
+                        A little garden of wishes
+                    </h2>
+
+                    <p class="font-handwriting text-lg sm:text-2xl text-sage-800 max-w-md mx-auto leading-relaxed px-2">
+                        Hal-hal indah emang tumbuh pelan-pelan,<br/>
+                        kayak bunga, kayak harapan,<br/>
+                        dan semua doa baik buat kamu. 💚
+                    </p>
+                </div>
+
+                <div class="my-3 sm:my-6 relative z-10">
+                    <div class="flex items-center justify-center gap-2 sm:gap-3 my-2 text-goldAccent">
+                        <span class="h-[1px] w-8 sm:w-14 bg-goldAccent/40"></span>
+                        <i class="fa-solid fa-leaf text-xs text-sage-600"></i>
+                        <i class="fa-solid fa-flower text-sm"></i>
+                        <i class="fa-solid fa-leaf text-xs text-sage-600 rotate-90"></i>
+                        <span class="h-[1px] w-8 sm:w-14 bg-goldAccent/40"></span>
+                    </div>
+
+                    <p class="font-cinzel text-[10px] sm:text-xs tracking-widest text-sage-700 mb-2 sm:mb-3 font-bold">
+                        COUNTING DOWN TO YOUR DAY
+                    </p>
+
+                    <div class="grid grid-cols-4 gap-1.5 sm:gap-3 max-w-sm mx-auto">
+                        <div class="bg-sage-100/90 border border-goldAccent/30 rounded-xl sm:rounded-2xl p-1.5 sm:p-3 text-center shadow-md">
+                            <span id="days" class="font-serifTitle text-lg sm:text-3xl font-bold text-sage-900 block">00</span>
+                            <span class="text-[9px] sm:text-xs font-bold text-sage-600 tracking-wider font-cinzel">HARI</span>
+                        </div>
+                        <div class="bg-sage-100/90 border border-goldAccent/30 rounded-xl sm:rounded-2xl p-1.5 sm:p-3 text-center shadow-md">
+                            <span id="hours" class="font-serifTitle text-lg sm:text-3xl font-bold text-sage-900 block">00</span>
+                            <span class="text-[9px] sm:text-xs font-bold text-sage-600 tracking-wider font-cinzel">JAM</span>
+                        </div>
+                        <div class="bg-sage-100/90 border border-goldAccent/30 rounded-xl sm:rounded-2xl p-1.5 sm:p-3 text-center shadow-md">
+                            <span id="minutes" class="font-serifTitle text-lg sm:text-3xl font-bold text-sage-900 block">00</span>
+                            <span class="text-[9px] sm:text-xs font-bold text-sage-600 tracking-wider font-cinzel">MENIT</span>
+                        </div>
+                        <div class="bg-sage-100/90 border border-goldAccent/30 rounded-xl sm:rounded-2xl p-1.5 sm:p-3 text-center shadow-md">
+                            <span id="seconds" class="font-serifTitle text-lg sm:text-3xl font-bold text-sage-900 block">00</span>
+                            <span class="text-[9px] sm:text-xs font-bold text-sage-600 tracking-wider font-cinzel">DETIK</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-2.5 sm:mt-4 text-[10px] sm:text-xs font-semibold text-sage-700 flex items-center justify-center gap-1.5 font-cinzel tracking-wider">
+                        <i class="fa-regular fa-calendar-check text-goldAccent"></i>
+                        <span>01 NOVEMBER 2026 · 00:00 WIB</span>
+                    </div>
+                </div>
+
+                <div class="relative z-10 pt-2 border-t border-sage-200/60">
+                    <p class="text-xs sm:text-sm text-sage-600 font-handwriting">
+                        Selesaikan minigame kejutan di bawah ini buat buka hadiahnya ya... 🌷
+                    </p>
+                    <div class="pt-1 text-[9px] sm:text-[10px] tracking-widest text-sage-500 font-cinzel font-semibold">
+                        MADE WITH LOVE · JUST FOR YOU
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT PANEL: SURAT DARI AELL -->
+            <div class="lg:col-span-5 botanical-card rounded-2xl sm:rounded-3xl p-4 sm:p-8 flex flex-col justify-between relative overflow-hidden">
+                <div class="border-2 border-dashed border-sage-300 rounded-xl sm:rounded-2xl p-4 sm:p-6 h-full flex flex-col justify-between bg-white/50 backdrop-blur-sm">
+                    
+                    <div>
+                        <div class="flex items-center justify-between mb-2.5 border-b border-sage-200 pb-2">
+                            <span class="text-[11px] sm:text-xs font-cinzel font-bold tracking-widest text-sage-700">SPECIAL LETTER</span>
+                            <i class="fa-solid fa-envelope-open-text text-goldAccent text-base sm:text-xl"></i>
+                        </div>
+
+                        <h3 class="font-serifTitle text-base sm:text-xl font-bold text-sage-900 mb-2">
+                            To: My Favorite Birthday Girl 🌷
+                        </h3>
+
+                        <div class="space-y-2 sm:space-y-3 font-handwriting text-base sm:text-xl text-sage-800 leading-relaxed max-h-[220px] sm:max-h-[360px] overflow-y-auto pr-1">
+                            <p>Hellooo, dedeee!</p>
+                            <p>Sebelumm masukkk ke hadiah kecill iniii, Aell mauu bilang sesuatuu. Hari iniii adalaah harii spesial, harii di mana seseorang yang istimewa dilahirkan ke duniaa.</p>
+                            <p class="font-bold text-sage-900 bg-sage-100/80 p-2 rounded-xl border-l-4 border-goldAccent">
+                                Selamatt ulang tahunnn yang ke-16, dedeeee! 💗
+                            </p>
+                            <p>Mungkin surat iniii nggaa seberapa, tapii Aell berharap setiap kata yang ada di dalamnya bisa bikin dedeee tersenyum.</p>
+                            <p>Aell sengajaa bikinn website kecill iniii buat dedeee. Ada beberapa kejutan, permainan, bunga-bunga, dan tentunya sesuatu yang Aell siapkan khusus buat dedeee.</p>
+                            <p>Jadiii, jangan lupaa nikmatinn setiap bagiannyaa, yaaa! Jangan buru-buruu, karena setiap halaman punya kejutan kecilnya sendiriii.</p>
+                            <p>Once again, happy sweet sixteen, my favorite girl!</p>
+                            <p class="pt-1.5 font-bold">With lots of love,<br/><span class="font-serifTitle text-xl sm:text-2xl text-sage-800">Aell 💚</span></p>
+                            <p class="text-[10px] sm:text-xs font-sans italic text-sage-600 pt-2 border-t border-sage-200">
+                                P.S. Jangan lupa buka suratnya sampai selesai, karena masih ada kejutan lain yang menunggu dedeee!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 sm:mt-6 pt-3 border-t border-sage-200 text-center">
+                        <button id="startGamesBtn" onclick="nextStage(1)" disabled class="w-full py-3 sm:py-3.5 px-4 rounded-xl bg-sage-300 text-sage-500 font-bold text-xs sm:text-sm cursor-not-allowed transition duration-300 flex items-center justify-center gap-2 shadow-none active:scale-95">
+                            <span>Lanjut ke Game Kejutan</span>
+                            <i class="fa-solid fa-gift"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- STAGE 1: HOW WELL DO YOU KNOW ME? -->
+    <div id="stage1" class="page-transition page-hidden">
+        <div class="botanical-card rounded-2xl sm:rounded-3xl p-4 sm:p-8 max-w-2xl mx-auto shadow-2xl">
+            <div class="text-center mb-4">
+                <span class="px-3 py-1 bg-sage-200 text-sage-800 text-[10px] sm:text-xs font-bold rounded-full uppercase tracking-wider font-cinzel">Game 1 dari 6</span>
+                <h2 class="font-serifTitle text-xl sm:text-3xl font-bold text-sage-900 mt-2">🎮 How Well Do You Know Me?</h2>
+                <p class="text-xs text-sage-600 mt-1">Game tebak-tebakan manis tentang pasangan!</p>
+            </div>
+
+            <div id="quizBox" class="bg-white/70 border border-sage-200 rounded-xl sm:rounded-2xl p-3.5 sm:p-6 shadow-sm backdrop-blur-sm">
+                <div class="flex items-center justify-between text-xs font-bold text-sage-700 mb-3 border-b border-sage-200 pb-2">
+                    <span id="quizProgress" class="font-cinzel text-[11px] sm:text-xs">Pertanyaan 1 dari 5</span>
+                    <span class="text-sage-800 bg-goldLight/70 border border-goldAccent/30 px-2 py-0.5 rounded-full text-[10px] sm:text-xs" id="quizScore">Skor: 0</span>
+                </div>
+
+                <h3 id="quizQuestion" class="font-serifTitle text-base sm:text-xl font-bold text-sage-900 mb-4 min-h-[40px] leading-snug">
+                    Loading...
+                </h3>
+
+                <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+                </div>
+
+                <div id="quizInputGroup" class="hidden space-y-2.5">
+                    <textarea id="quizTextInput" rows="3" placeholder="Tuliskan jawaban atau harapan manis dedeee di sini..." class="w-full p-3 rounded-xl border border-sage-300 bg-white focus:outline-none focus:ring-2 focus:ring-sage-500 text-xs sm:text-sm shadow-inner"></textarea>
+                    <button onclick="submitQuizTextAnswer()" class="w-full py-3 bg-sage-700 hover:bg-sage-800 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-md active:scale-95">
+                        Kirim Jawaban ✨
+                    </button>
+                </div>
+
+                <div id="quizFeedback" class="hidden mt-3 p-3 rounded-xl text-center font-bold text-xs sm:text-sm shadow-sm"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STAGE 2: CATCH THE FLOWERS -->
+    <div id="stage2" class="page-transition page-hidden">
+        <div class="botanical-card rounded-2xl sm:rounded-3xl p-4 sm:p-8 max-w-2xl mx-auto text-center shadow-2xl">
+            <span class="px-3 py-1 bg-sage-200 text-sage-800 text-[10px] sm:text-xs font-bold rounded-full uppercase tracking-wider font-cinzel">Game 2 dari 6</span>
+            <h2 class="font-serifTitle text-xl sm:text-3xl font-bold text-sage-900 mt-2">🌷 Catch The Flowers</h2>
+            <p class="text-xs text-sage-600 mt-1 mb-3">Tangkap 20 bunga berjatuhan dengan keranjang dedeee!</p>
+
+            <div class="relative w-full h-[280px] sm:h-[340px] bg-gradient-to-b from-sage-100/80 to-sage-200/50 border-2 border-sage-300 rounded-xl sm:rounded-2xl overflow-hidden shadow-inner flex flex-col justify-between" id="catchGameContainer">
+                <div class="p-2 sm:p-3 flex justify-between items-center bg-white/80 backdrop-blur-md z-10 border-b border-sage-200">
+                    <span class="text-[10px] sm:text-xs font-bold text-sage-700 font-cinzel">Target: 20 Bunga</span>
+                    <span id="catchScoreDisplay" class="text-[10px] sm:text-xs font-bold text-sage-900 bg-goldLight px-2 py-0.5 rounded-full border border-goldAccent/40">Skor: 0</span>
+                </div>
+
+                <canvas id="catchCanvas" class="absolute inset-0 w-full h-full cursor-pointer touch-none"></canvas>
+
+                <!-- Mobile Touch Controls -->
+                <div class="absolute bottom-3 left-0 right-0 z-20 flex justify-between px-4 sm:px-6 pointer-events-none md:hidden">
+                    <button id="leftBtn" class="pointer-events-auto bg-sage-700/90 text-white w-12 h-12 rounded-full flex items-center justify-center text-lg shadow-xl active:scale-95 touch-none">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <button id="rightBtn" class="pointer-events-auto bg-sage-700/90 text-white w-12 h-12 rounded-full flex items-center justify-center text-lg shadow-xl active:scale-95 touch-none">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="catchSuccessMessage" class="hidden mt-4 p-4 bg-sage-100/90 border border-goldAccent/40 rounded-xl sm:rounded-2xl text-sage-900 text-xs sm:text-sm font-medium leading-relaxed shadow-md">
+                <p class="font-handwriting text-lg sm:text-xl text-sage-900 mb-2">
+                    "Yayyy! Dedeee berhasil mengumpulkan bunga sebanyak ini. Semoga kebahagiaan dedeee juga terkumpul sebanyak bunga ini." 🌸✨
+                </p>
+                <button onclick="nextStage(3)" class="w-full py-3 bg-sage-700 text-white font-bold text-xs sm:text-sm rounded-xl hover:bg-sage-800 transition shadow-md active:scale-95">
+                    Lanjut ke Game 3 🧩
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STAGE 3: MEMORY MATCHING GAME -->
+    <div id="stage3" class="page-transition page-hidden">
+        <div class="botanical-card rounded-2xl sm:rounded-3xl p-4 sm:p-8 max-w-2xl mx-auto text-center shadow-2xl">
+            <span class="px-3 py-1 bg-sage-200 text-sage-800 text-[10px] sm:text-xs font-bold rounded-full uppercase tracking-wider font-cinzel">Game 3 dari 6</span>
+            <h2 class="font-serifTitle text-xl sm:text-3xl font-bold text-sage-900 mt-2">🧩 Memory Matching Game</h2>
+            <p class="text-xs text-sage-600 mt-1 mb-3">Cocokkan 12 kartu pasangan gambar bunga & bulan!</p>
+
+            <div id="memoryGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3 max-w-md mx-auto my-3 perspective-1000">
+            </div>
+
+            <div id="memorySuccess" class="hidden mt-4 p-4 bg-sage-100 border border-goldAccent/40 rounded-xl sm:rounded-2xl text-sage-900 text-xs sm:text-sm shadow-md">
+                <p class="font-serifTitle font-bold text-base sm:text-lg text-sage-900 mb-1">🎉 Hebat Banget Dedeee!</p>
+                <p class="font-handwriting text-base sm:text-lg">Semua kartu berhasil dicocokkan! Amplop cinta rahasia siap dibuka selanjutnya.</p>
+                <button onclick="nextStage(4)" class="mt-3 w-full py-3 bg-sage-700 text-white font-bold text-xs sm:text-sm rounded-xl hover:bg-sage-800 transition shadow-md active:scale-95">
+                    Lanjut Buka Amplop 💌
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STAGE 4: OPEN THE LOVE LETTERS -->
+    <div id="stage4" class="page-transition page-hidden">
+        <div class="botanical-card rounded-2xl sm:rounded-3xl p-4 sm:p-8 max-w-3xl mx-auto text-center shadow-2xl">
+            <span class="px-3 py-1 bg-sage-200 text-sage-800 text-[10px] sm:text-xs font-bold rounded-full uppercase tracking-wider font-cinzel">Game 4 dari 6</span>
+            <h2 class="font-serifTitle text-xl sm:text-3xl font-bold text-sage-900 mt-2">💌 Open The Love Letters</h2>
+            <p class="text-xs text-sage-600 mt-1 mb-4">Pilih dan buka setiap amplop rahasia dari Aell!</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4 text-left">
+                <div id="env1" onclick="openEnvelope(1)" class="p-3.5 sm:p-5 bg-white/80 border-2 border-sage-300 rounded-xl sm:rounded-2xl cursor-pointer hover:border-goldAccent transition-all duration-300 shadow-sm relative overflow-hidden group">
+                    <div class="flex items-center gap-2.5 sm:gap-3">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-sage-100 flex items-center justify-center text-sage-700 group-hover:scale-110 transition shrink-0">
+                            <i class="fa-solid fa-envelope text-base sm:text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sage-900 text-xs sm:text-sm">Amplop 1: Kenangan Bersama</h4>
+                            <span class="text-[10px] sm:text-xs text-sage-600 status-tag font-medium">Klik untuk membuka 💌</span>
+                        </div>
+                    </div>
+                    <p class="env-content hidden mt-2.5 pt-2.5 border-t border-sage-200 font-handwriting text-base sm:text-lg text-sage-900 leading-relaxed">
+                        "Ingat gak pas awal-awal kita kenal? Setiap obrolan kecil sama dedeee selalu bisa bikin hari Aell jadi jauh lebih berwarna dan tenang."
+                    </p>
+                </div>
+
+                <div id="env2" onclick="openEnvelope(2)" class="p-3.5 sm:p-5 bg-white/80 border-2 border-sage-300 rounded-xl sm:rounded-2xl cursor-pointer hover:border-goldAccent transition-all duration-300 shadow-sm relative overflow-hidden group">
+                    <div class="flex items-center gap-2.5 sm:gap-3">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-sage-100 flex items-center justify-center text-sage-700 group-hover:scale-110 transition shrink-0">
+                            <i class="fa-solid fa-envelope text-base sm:text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sage-900 text-xs sm:text-sm">Amplop 2: Alasan Bersyukur</h4>
+                            <span class="text-[10px] sm:text-xs text-sage-600 status-tag font-medium">Klik untuk membuka 💌</span>
+                        </div>
+                    </div>
+                    <p class="env-content hidden mt-2.5 pt-2.5 border-t border-sage-200 font-handwriting text-base sm:text-lg text-sage-900 leading-relaxed">
+                        "Aell bersyukur banget punya dedeee di hidup Aell. Sifat manja, perhatian, dan senyuman dedeee itu tempat pulang paling nyaman."
+                    </p>
+                </div>
+
+                <div id="env3" onclick="openEnvelope(3)" class="p-3.5 sm:p-5 bg-white/80 border-2 border-sage-300 rounded-xl sm:rounded-2xl cursor-pointer hover:border-goldAccent transition-all duration-300 shadow-sm relative overflow-hidden group">
+                    <div class="flex items-center gap-2.5 sm:gap-3">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-sage-100 flex items-center justify-center text-sage-700 group-hover:scale-110 transition shrink-0">
+                            <i class="fa-solid fa-envelope text-base sm:text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sage-900 text-xs sm:text-sm">Amplop 3: Harapan Usia 16</h4>
+                            <span class="text-[10px] sm:text-xs text-sage-600 status-tag font-medium">Klik untuk membuka 💌</span>
+                        </div>
+                    </div>
+                    <p class="env-content hidden mt-2.5 pt-2.5 border-t border-sage-200 font-handwriting text-base sm:text-lg text-sage-900 leading-relaxed">
+                        "Di umur ke-16 ini, semoga dedeee makin bahagia, makin lancar sekolahnya, makin disayang orang tua, dan makin sayang sama Aell!"
+                    </p>
+                </div>
+
+                <div id="env4" onclick="openEnvelope(4)" class="p-3.5 sm:p-5 bg-white/80 border-2 border-sage-300 rounded-xl sm:rounded-2xl cursor-pointer hover:border-goldAccent transition-all duration-300 shadow-sm relative overflow-hidden group">
+                    <div class="flex items-center gap-2.5 sm:gap-3">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-sage-100 flex items-center justify-center text-sage-700 group-hover:scale-110 transition shrink-0">
+                            <i class="fa-solid fa-envelope text-base sm:text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sage-900 text-xs sm:text-sm">Amplop 4: Janji Aell</h4>
+                            <span class="text-[10px] sm:text-xs text-sage-600 status-tag font-medium">Klik untuk membuka 💌</span>
+                        </div>
+                    </div>
+                    <p class="env-content hidden mt-2.5 pt-2.5 border-t border-sage-200 font-handwriting text-base sm:text-lg text-sage-900 leading-relaxed">
+                        "Aell bakal selalu ada buat nemenin dedeee dalam suka maupun duka. Apapun yang terjadi, dedeee selalu punya Aell."
+                    </p>
+                </div>
+            </div>
+
+            <button id="lettersNextBtn" disabled onclick="nextStage(5)" class="mt-4 sm:mt-6 w-full py-3.5 bg-sage-300 text-sage-500 font-bold text-xs sm:text-sm rounded-xl cursor-not-allowed transition active:scale-95">
+                Buka Semua Amplop Dahulu (0/4)
+            </button>
+        </div>
+    </div>
+
+    <!-- STAGE 5: BIRTHDAY CAKE CHALLENGE -->
+    <div id="stage5" class="page-transition page-hidden">
+        <div class="botanical-card rounded-2xl sm:rounded-3xl p-4 sm:p-8 max-w-2xl mx-auto text-center shadow-2xl">
+            <span class="px-3 py-1 bg-sage-200 text-sage-800 text-[10px] sm:text-xs font-bold rounded-full uppercase tracking-wider font-cinzel">Game 5 dari 6</span>
+            <h2 class="font-serifTitle text-xl sm:text-3xl font-bold text-sage-900 mt-2">🎂 Birthday Cake Challenge</h2>
+            <p class="text-xs text-sage-600 mt-1 mb-3">Hias kue ulang tahun ke-16 dedeee sendiri!</p>
+
+            <div class="bg-white/90 border-2 border-sage-300 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-inner relative min-h-[240px] sm:min-h-[290px] flex flex-col items-center justify-end">
+                
+                <div id="cakeBody" class="w-40 sm:w-52 h-24 sm:h-32 bg-pink-200 rounded-t-3xl relative transition-all duration-300 shadow-lg border-b-8 border-amber-900/30 flex flex-col items-center justify-between py-2 sm:py-3 overflow-hidden">
+                    
+                    <div id="candleContainer" class="absolute -top-10 sm:-top-12 flex justify-center gap-3 sm:gap-4 w-full">
+                        <div class="w-3 sm:w-3.5 h-10 sm:h-12 bg-amber-100 border border-amber-300 rounded-t-sm relative shadow-sm">
+                            <div class="flame hidden absolute -top-4 sm:-top-5 left-1/2 -translate-x-1/2 w-3 sm:w-3.5 h-4 sm:h-5 bg-amber-400 rounded-full animate-pulse shadow-lg"></div>
+                        </div>
+                        <div class="w-3 sm:w-3.5 h-10 sm:h-12 bg-amber-100 border border-amber-300 rounded-t-sm relative shadow-sm">
+                            <div class="flame hidden absolute -top-4 sm:-top-5 left-1/2 -translate-x-1/2 w-3 sm:w-3.5 h-4 sm:h-5 bg-amber-400 rounded-full animate-pulse shadow-lg"></div>
+                        </div>
+                    </div>
+
+                    <div id="cakeFlowers" class="hidden w-full flex justify-around items-center text-lg sm:text-xl z-10 pt-1">
+                        <span>🌸</span>
+                        <span>🌷</span>
+                        <span>🌺</span>
+                    </div>
+
+                    <div class="flex-1 flex items-center justify-center z-10">
+                        <span id="cakeNameText" class="font-serifTitle font-extrabold text-sage-900 text-base sm:text-xl tracking-wider"></span>
+                    </div>
+                </div>
+
+                <div class="w-48 sm:w-64 h-3.5 sm:h-4 bg-gray-300/80 rounded-full shadow-md border-t border-white"></div>
+
+                <div id="cakeBanner" class="hidden my-3 sm:my-4 p-2 sm:p-2.5 bg-goldLight border border-goldAccent/50 text-sage-900 font-cinzel font-bold text-xs sm:text-lg rounded-xl animate-bounce shadow-md">
+                    HAPPY 16TH BIRTHDAY, AZZA! 🎉
+                </div>
+            </div>
+
+            <div class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] sm:text-xs font-bold">
+                <button onclick="changeCakeColor('pink')" class="p-2 sm:p-2.5 bg-pink-100 rounded-xl hover:bg-pink-200 text-pink-900 shadow-sm active:scale-95 transition">Warna Pink</button>
+                <button onclick="changeCakeColor('sage')" class="p-2 sm:p-2.5 bg-sage-200 rounded-xl hover:bg-sage-300 text-sage-900 shadow-sm active:scale-95 transition">Warna Sage</button>
+                <button onclick="changeCakeColor('lavender')" class="p-2 sm:p-2.5 bg-purple-100 rounded-xl hover:bg-purple-200 text-purple-900 shadow-sm active:scale-95 transition">Lavender</button>
+                <button onclick="changeCakeColor('cream')" class="p-2 sm:p-2.5 bg-amber-100 rounded-xl hover:bg-amber-200 text-amber-900 shadow-sm active:scale-95 transition">Cream</button>
+            </div>
+
+            <div class="mt-2 flex flex-wrap justify-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs font-semibold">
+                <button onclick="toggleCakeFlowers()" class="flex-1 sm:flex-none px-3 py-2 sm:px-3.5 sm:py-2.5 bg-white border border-sage-300 rounded-xl hover:bg-sage-100 text-sage-800 shadow-sm active:scale-95 transition">🌸 Tambah Bunga</button>
+                <button onclick="lightCakeCandles()" class="flex-1 sm:flex-none px-3 py-2 sm:px-3.5 sm:py-2.5 bg-goldAccent text-sage-950 font-bold rounded-xl hover:bg-yellow-500 shadow-sm active:scale-95 transition">🔥 Nyalakan Lilin</button>
+                <button onclick="setCakeName()" class="w-full sm:w-auto px-3 py-2 sm:px-3.5 sm:py-2.5 bg-white border border-sage-300 rounded-xl hover:bg-sage-100 text-sage-800 shadow-sm active:scale-95 transition">✍️ Tulis "AZZA"</button>
+            </div>
+
+            <button id="cakeNextBtn" disabled onclick="nextStage(6)" class="mt-4 sm:mt-6 w-full py-3.5 bg-sage-300 text-sage-500 font-bold text-xs sm:text-sm rounded-xl cursor-not-allowed transition active:scale-95">
+                Selesaikan Kue & Nyalakan Lilin Dahulu ✨
+            </button>
+        </div>
+    </div>
+
+    <!-- STAGE 6: COLLECT THE HEARTS -->
+    <div id="stage6" class="page-transition page-hidden">
+        <div class="botanical-card rounded-2xl sm:rounded-3xl p-4 sm:p-8 max-w-2xl mx-auto text-center shadow-2xl">
+            <span class="px-3 py-1 bg-sage-200 text-sage-800 text-[10px] sm:text-xs font-bold rounded-full uppercase tracking-wider font-cinzel">Game 6 dari 6</span>
+            <h2 class="font-serifTitle text-xl sm:text-3xl font-bold text-sage-900 mt-2">💚 Collect The Hearts</h2>
+            <p class="text-xs text-sage-600 mt-1 mb-2">Klik 16 hati yang melayang untuk mengumpulkan doa kebahagiaan!</p>
+
+            <div id="heartPlayground" class="relative w-full h-[250px] sm:h-[310px] bg-white/60 border-2 border-sage-300 rounded-xl sm:rounded-2xl overflow-hidden my-3 shadow-inner">
+            </div>
+
+            <div class="flex items-center justify-between text-[10px] sm:text-xs font-bold text-sage-800 bg-sage-100/90 p-2.5 sm:p-3.5 rounded-xl mb-3 border border-sage-200">
+                <span>Hati Terkumpul: <strong id="heartCountText" class="text-sage-900 font-serifTitle text-xs sm:text-sm">0/16</strong></span>
+                <span id="lastWordUnlocked" class="text-sage-800 italic font-medium truncate max-w-[130px] sm:max-w-none">Klik hati melayang!</span>
+            </div>
+
+            <div id="heartSuccess" class="hidden p-4 bg-goldLight/90 border border-goldAccent/50 text-sage-900 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold shadow-md">
+                ✨ Semua 16 Doa Kebahagiaan Terkumpul! Siap klaim hadiah utama dedeee? ✨
+                <button onclick="nextStage(7)" class="mt-3 w-full py-3.5 bg-sage-700 text-white font-bold text-xs sm:text-sm rounded-xl hover:bg-sage-800 transition shadow-md active:scale-95">
+                    Buka Hadiah Utama 🎁
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STAGE 7: FINAL SURPRISE -->
+    <div id="stage7" class="page-transition page-hidden">
+        <div class="botanical-card rounded-2xl sm:rounded-3xl p-5 sm:p-12 max-w-2xl mx-auto text-center relative overflow-hidden shadow-2xl">
+            <div class="my-2 sm:my-4">
+                <span class="text-5xl sm:text-6xl float-anim inline-block mb-3 sm:mb-4">💐</span>
+                <h2 class="font-serifTitle text-2xl sm:text-4xl font-extrabold text-sage-900 mb-2">
+                    Happy 16th Birthday Azza!
+                </h2>
+                <p class="font-handwriting text-xl sm:text-2xl text-sage-800 mb-5 sm:mb-6">
+                    You have unlocked your special gift.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-2.5 sm:gap-3 justify-center items-center">
+                    <button onclick="triggerFinalGardenSurprise()" class="w-full sm:w-auto py-3.5 sm:py-4 px-6 sm:px-8 bg-sage-700 hover:bg-sage-800 text-white font-bold text-xs sm:text-lg rounded-xl sm:rounded-2xl shadow-2xl transition-all transform hover:scale-105 active:scale-95 pulse-unlock flex items-center justify-center gap-2 sm:gap-3 border border-goldAccent/40">
+                        <i class="fa-solid fa-gift text-lg sm:text-2xl text-goldLight"></i>
+                        <span>CLAIM YOUR BIRTHDAY GIFT</span>
+                    </button>
+                    <button onclick="nextStage(0)" class="w-full sm:w-auto py-3.5 sm:py-4 px-5 sm:px-6 bg-white hover:bg-sage-100 text-sage-800 font-bold text-xs sm:text-sm rounded-xl sm:rounded-2xl border border-sage-300 shadow-md transition active:scale-95">
+                        🏠 Kembali ke Beranda
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- FINAL POPUP MODAL (SURAT KHUSUS DARI AELL & FOTO) -->
+<div id="finalModal" class="fixed inset-0 bg-sage-900/70 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-4 opacity-0 pointer-events-none transition-opacity duration-500">
+    <div class="botanical-card max-w-2xl w-full rounded-2xl sm:rounded-3xl p-4 sm:p-8 text-center relative transform scale-95 transition-transform duration-500 shadow-2xl border-2 border-goldAccent/50 max-h-[90vh] overflow-y-auto">
+        <span class="text-3xl sm:text-5xl mb-1.5 sm:mb-2 block">🥳💝🎀</span>
+        <h3 class="font-serifTitle text-lg sm:text-2xl font-bold text-sage-900 mb-3 sm:mb-4">
+            Surat Spesial Buat Dedeee 💖
+        </h3>
+
+        <!-- GALERI FOTO ANGGUN (RESPONSIVE GRID) -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3.5 sm:mb-4 p-1.5 sm:p-2 bg-white/60 rounded-xl sm:rounded-2xl border border-sage-200">
+            <div class="p-1 bg-white rounded-lg sm:rounded-xl shadow-sm border border-sage-200">
+                <img src="https://lh3.googleusercontent.com/d/1BINS0mrmek-_lyLqKi2vt8AGjfy78Bj7" alt="Azza Photo 1" class="w-full h-20 sm:h-24 object-cover rounded-md sm:rounded-lg" />
+            </div>
+            <div class="p-1 bg-white rounded-lg sm:rounded-xl shadow-sm border border-sage-200">
+                <img src="https://lh3.googleusercontent.com/d/1QNgrwSrjT6TGkQsnJgOZEOKXNaxSuyxL" alt="Azza Photo 2" class="w-full h-20 sm:h-24 object-cover rounded-md sm:rounded-lg" />
+            </div>
+            <div class="p-1 bg-white rounded-lg sm:rounded-xl shadow-sm border border-sage-200">
+                <img src="https://lh3.googleusercontent.com/d/11X3IpWyEycZfJOSCSnipyj9NWR6OeGVK" alt="Azza Photo 3" class="w-full h-20 sm:h-24 object-cover rounded-md sm:rounded-lg" />
+            </div>
+            <div class="p-1 bg-white rounded-lg sm:rounded-xl shadow-sm border border-sage-200">
+                <img src="https://lh3.googleusercontent.com/d/1a-7YX8T2Z5QW5PUUFJY1Pz9uDPM-TZ3C" alt="Azza Photo 4" class="w-full h-20 sm:h-24 object-cover rounded-md sm:rounded-lg" />
+            </div>
+        </div>
+
+        <div class="space-y-2.5 sm:space-y-3 font-handwriting text-base sm:text-xl text-sage-900 leading-relaxed text-left bg-white/80 p-3.5 sm:p-6 rounded-xl sm:rounded-2xl border border-sage-200 shadow-inner">
+            <p>Aelll harappp diii harii ulangg tahunn dedeee ke-16 inii, selamatt bertambahh usia cii ucull andd cantikkkkk!🥳💝🎀</p>
+            <p>Harii iniii bukann cumaa tentangg nambahhnyaa usia, tapii iniii tentangg perjalanannn yanggg panjangann dedeee melewatii dengann baikk. Tentangg setiapp tawaa, airr mataa, ceritaa, samaa kenangannn.</p>
+            <p>Semoga di usia yang baru ini, hal-hal baikk datenggg nggaa haruss selaluu dedeee mintaa, kebahagiaann hadirr nggaa haruss dedeee carii terlaluu jauhh, teruss apapunn impiann yanggg selamaa iniii dedeee simpennn dikitt-dikitt, datenggg jalannyaa.</p>
+            <p>Nggaa bolee terlalu keras kee dirii sendirii. Nggaa apa-apaa kaloo sesekali capee, nggaa apa-apaa kaloo perjalanannn dedeee bedaa dari kebanyakann orangg. Dedeee punyaa waktuu sendiri buatt tumbuh dan bersinar, tapii Aell temeninnn darii setiapp prosess. Aell orangg yang syukaa berprosess samaa pasangann, apalagii dedeee.</p>
+            <p>Terusinn jadiii diriii sendirii, samaa keunikan dedeee, kekurangan dedeee, andd kelebihan yang dedeee punyaa.</p>
+            <p>Makaciii cantikkkknyaa, Aelll udaa samaa Aelll teruss. Walaupunn banyakkk perjalanannyaa bikinn dedeee capee, tapii dedeee haruss bilangg kee Aelll kaloo kenapaa-napaa, biarr Aell peyukkk dedeee. Lopyuuuu veryy veryyy muchhh!</p>
+            <p>Teteppp bersyukurr samaa kehidupannyaaa, dedeee. Nantii perlahann bakalann datengg hall-hall baikk.</p>
+            <p class="font-serifTitle italic text-sage-800 font-semibold pt-1.5 text-xs sm:text-base">May your new age be filled with beautiful moments, unexpected happiness, endless blessings, and memories worth remembering.</p>
+            <p class="font-serifTitle font-bold text-sage-900 text-xs sm:text-base">Selamat ulang tahun, Azza. Semoga tahun ini menjadi salah satu halaman terindah dalam cerita hidupmu. 🌷</p>
+            <p class="font-serifTitle italic font-bold text-sage-800 text-center border-t border-sage-200 pt-2.5 text-xs sm:text-base">'You deserve a life as beautiful as the dreams you keep inside your heart.' 💚</p>
+        </div>
+        <div class="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-2 justify-center">
+            <button onclick="closeFinalModal()" class="px-5 py-3 bg-sage-700 text-white font-bold text-xs sm:text-sm rounded-xl hover:bg-sage-800 transition shadow-md active:scale-95">
+                Tutup & Nikmati Taman Bunga 🌷
+            </button>
+            <button onclick="closeFinalModal(); nextStage(0);" class="px-5 py-3 bg-white text-sage-800 font-bold text-xs sm:text-sm border border-sage-300 rounded-xl hover:bg-sage-100 transition shadow-sm active:scale-95">
+                🏠 Kembali ke Beranda
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- AUDIO & SCRIPT LOGIC -->
+<script>
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx;
+
+    function initAudio() {
+        if (!audioCtx) audioCtx = new AudioCtx();
+    }
+
+    function playChime(freq = 523.25, type = 'sine') {
+        try {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.8);
+        } catch(e){}
+    }
+
+    const targetDate = new Date("2026-11-01T00:00:00+07:00").getTime();
+    let currentStage = 0;
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+
+        if (diff <= 0) {
+            document.getElementById('days').innerText = "00";
+            document.getElementById('hours').innerText = "00";
+            document.getElementById('minutes').innerText = "00";
+            document.getElementById('seconds').innerText = "00";
+            unlockContent();
+        } else {
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+        }
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    function unlockContent() {
+        const startGamesBtn = document.getElementById('startGamesBtn');
+        startGamesBtn.disabled = false;
+        startGamesBtn.className = "w-full py-3 sm:py-3.5 px-4 rounded-xl bg-sage-700 text-white font-bold text-xs sm:text-sm hover:bg-sage-800 transition duration-300 flex items-center justify-center gap-2 shadow-md cursor-pointer active:scale-95";
+    }
+
+    function nextStage(stageNum) {
+        playChime(587.33);
+        const currentEl = document.getElementById('stage' + currentStage);
+        const nextEl = document.getElementById('stage' + stageNum);
+
+        if (currentEl && nextEl) {
+            currentEl.classList.remove('page-visible');
+            currentEl.classList.add('page-hidden');
+
+            setTimeout(() => {
+                nextEl.classList.remove('page-hidden');
+                nextEl.classList.add('page-visible');
+                currentStage = stageNum;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                if (stageNum === 1) initQuiz();
+                if (stageNum === 2) initCatchGame();
+                if (stageNum === 3) initMemoryGame();
+                if (stageNum === 6) initHeartCollector();
+            }, 350);
+        }
+    }
+
+    const canvas = document.getElementById('petalCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Petal {
+        constructor() { this.reset(); }
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * -canvas.height;
+            this.size = Math.random() * 8 + 5;
+            this.speedY = Math.random() * 1.5 + 0.8;
+            this.speedX = Math.random() * 1 - 0.5;
+            this.rotation = Math.random() * 360;
+            this.rotSpeed = Math.random() * 2 - 1;
+            const colors = ['#C9D7C8', '#ACBCA9', '#FAF7F0', '#F3E5AB', '#D4AF37'];
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+            this.isLeaf = Math.random() > 0.5;
+        }
+        update() {
+            this.y += this.speedY;
+            this.x += Math.sin(this.y * 0.01) + this.speedX;
+            this.rotation += this.rotSpeed;
+            if (this.y > canvas.height + 20) this.reset();
+        }
+        draw() {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.rotate((this.rotation * Math.PI) / 180);
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            if (this.isLeaf) {
+                ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, 2 * Math.PI);
+            } else {
+                ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
+            }
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    const initialParticleCount = window.innerWidth < 640 ? 20 : 35;
+    for (let i = 0; i < initialParticleCount; i++) particles.push(new Petal());
+
+    function animatePetals() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animatePetals);
+    }
+    animatePetals();
+
+    function burstPetals(count = 30) {
+        const actualCount = window.innerWidth < 640 ? Math.floor(count * 0.6) : count;
+        for (let i = 0; i < actualCount; i++) {
+            const p = new Petal();
+            p.y = canvas.height / 2 + (Math.random() * 200 - 100);
+            p.x = canvas.width / 2 + (Math.random() * 200 - 100);
+            p.speedY = Math.random() * -4 - 1;
+            particles.push(p);
+        }
+    }
+
+    /* Quiz Logic */
+    const quizData = [
+        { q: "Siapa yang pertama kali ngajak ngobrol?", options: ["Aell", "dedeee", "Dua-duanya", "Teman"], correct: 1 },
+        { q: "Siapa yang paling sering ngambek?", options: ["dedeee", "Aell", "Gak ada", "Kucing"], correct: 0 },
+        { q: "Siapa yang lebih manja?", options: ["Aell", "dedeee", "Sama aja", "Rahasia"], correct: 1 },
+        { q: "Apa hal yang paling disukai Aell dari Dedeee?", isText: true },
+        { q: "Siapa yang paling sering bilang kangen?", options: ["Aell", "dedeee", "Dua-duanya", "Gak tahu"], correct: 1 }
+    ];
+
+    let quizIdx = 0;
+    let quizScore = 0;
+
+    function initQuiz() {
+        quizIdx = 0;
+        quizScore = 0;
+        showQuizQuestion();
+    }
+
+    function showQuizQuestion() {
+        const q = quizData[quizIdx];
+        document.getElementById('quizProgress').innerText = `Pertanyaan ${quizIdx + 1} dari ${quizData.length}`;
+        document.getElementById('quizScore').innerText = `Skor: ${quizScore}`;
+        document.getElementById('quizQuestion').innerText = q.q;
+
+        const optionsGroup = document.getElementById('quizOptions');
+        const inputGroup = document.getElementById('quizInputGroup');
+        const feedback = document.getElementById('quizFeedback');
+
+        feedback.classList.add('hidden');
+        optionsGroup.innerHTML = '';
+
+        if (q.isText) {
+            optionsGroup.classList.add('hidden');
+            inputGroup.classList.remove('hidden');
+        } else {
+            optionsGroup.classList.remove('hidden');
+            inputGroup.classList.add('hidden');
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "p-2.5 sm:p-3.5 bg-white hover:bg-sage-100 border border-sage-300 rounded-xl font-bold text-sage-800 text-xs sm:text-sm transition shadow-sm active:scale-95";
+                btn.innerText = opt;
+                btn.onclick = () => checkQuizAnswer(idx);
+                optionsGroup.appendChild(btn);
+            });
+        }
+    }
+
+    function checkQuizAnswer(selectedIdx) {
+        const q = quizData[quizIdx];
+        const feedback = document.getElementById('quizFeedback');
+        feedback.classList.remove('hidden');
+
+        if (selectedIdx === q.correct) {
+            quizScore += 20;
+            feedback.className = "mt-3 p-3 rounded-xl text-center font-bold text-xs sm:text-sm bg-sage-200 text-sage-900 animate-bounce shadow-sm";
+            feedback.innerText = "✨ Jawaban Benar! Dedeee memang paling pinter! 🌸";
+            burstPetals(20);
+            playChime(523.25);
+        } else {
+            feedback.className = "mt-3 p-3 rounded-xl text-center font-bold text-xs sm:text-sm bg-rose-100 text-rose-800 shadow-sm";
+            feedback.innerText = "😜 Teteeeoot! Jawaban yang bener tuh dedeee dong~";
+            playChime(220, 'sawtooth');
+        }
+
+        setTimeout(() => {
+            quizIdx++;
+            if (quizIdx < quizData.length) showQuizQuestion();
+            else finishQuiz();
+        }, 1800);
+    }
+
+    function submitQuizTextAnswer() {
+        const val = document.getElementById('quizTextInput').value.trim();
+        if (!val) return;
+        
+        quizScore += 20;
+        const feedback = document.getElementById('quizFeedback');
+        feedback.classList.remove('hidden');
+        feedback.className = "mt-3 p-3 rounded-xl text-center font-bold text-xs sm:text-sm bg-sage-200 text-sage-900 shadow-sm";
+        feedback.innerText = "💚 Manis banget! Aell suka semuanya dari dedeee!";
+        burstPetals(25);
+
+        setTimeout(() => {
+            quizIdx++;
+            if (quizIdx < quizData.length) showQuizQuestion();
+            else finishQuiz();
+        }, 1800);
+    }
+
+    function finishQuiz() {
+        document.getElementById('quizBox').innerHTML = `
+            <div class="text-center py-4 sm:py-6">
+                <span class="text-4xl sm:text-5xl">🎉</span>
+                <h3 class="font-serifTitle text-lg sm:text-2xl font-bold text-sage-900 mt-2">Kuis Selesai!</h3>
+                <p class="text-xs sm:text-sm text-sage-700 my-2">Skor Akhir Dedeee: <strong>${quizScore} / 100</strong></p>
+                <p class="font-handwriting text-xl sm:text-2xl text-sage-800 mb-4">Dedeee emang paling mengerti Aell! 💕</p>
+                <button onclick="nextStage(2)" class="w-full py-3.5 bg-sage-700 text-white font-bold text-xs sm:text-sm rounded-xl hover:bg-sage-800 transition shadow-md active:scale-95">
+                    Lanjut ke Game Catch Flowers 🌷
+                </button>
+            </div>
+        `;
+    }
+
+    /* Game Catch Flowers */
+    let catchScore = 0;
+    let catchAnimId = null;
+    let spawnTimer = null;
+
+    function initCatchGame() {
+        catchScore = 0;
+        document.getElementById('catchScoreDisplay').innerText = "Skor: 0";
+        document.getElementById('catchSuccessMessage').classList.add('hidden');
+
+        const c = document.getElementById('catchCanvas');
+        const cContainer = document.getElementById('catchGameContainer');
+        c.width = cContainer.clientWidth;
+        c.height = cContainer.clientHeight;
+
+        const basketW = Math.min(80, c.width * 0.28);
+        const basketH = 16;
+        let basketX = c.width / 2 - basketW / 2;
+
+        let fallingFlowers = [];
+
+        if (spawnTimer) clearInterval(spawnTimer);
+        if (catchAnimId) cancelAnimationFrame(catchAnimId);
+
+        function spawnFlower() {
+            fallingFlowers.push({
+                x: Math.random() * (c.width - 30),
+                y: -20,
+                speed: Math.random() * 2 + 1.6,
+                symbol: ['🌸', '🌷', '🌺', '🌹'][Math.floor(Math.random() * 4)]
+            });
+        }
+
+        spawnTimer = setInterval(spawnFlower, 750);
+
+        let leftPressed = false;
+        let rightPressed = false;
+
+        window.onkeydown = (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a') leftPressed = true;
+            if (e.key === 'ArrowRight' || e.key === 'd') rightPressed = true;
+        };
+        window.onkeyup = (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a') leftPressed = false;
+            if (e.key === 'ArrowRight' || e.key === 'd') rightPressed = false;
+        };
+
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+        leftBtn.ontouchstart = (e) => { e.preventDefault(); leftPressed = true; };
+        leftBtn.ontouchend = (e) => { e.preventDefault(); leftPressed = false; };
+        rightBtn.ontouchstart = (e) => { e.preventDefault(); rightPressed = true; };
+        rightBtn.ontouchend = (e) => { e.preventDefault(); rightPressed = false; };
+
+        let isDragging = false;
+        c.onmousedown = (e) => { isDragging = true; setBasketPosition(e.clientX); };
+        c.onmousemove = (e) => { if (isDragging) setBasketPosition(e.clientX); };
+        window.onmouseup = () => { isDragging = false; };
+
+        c.ontouchstart = (e) => { isDragging = true; setBasketPosition(e.touches[0].clientX); };
+        c.ontouchmove = (e) => { if (isDragging) setBasketPosition(e.touches[0].clientX); };
+        c.ontouchend = () => { isDragging = false; };
+
+        function setBasketPosition(clientX) {
+            const rect = c.getBoundingClientRect();
+            basketX = clientX - rect.left - basketW / 2;
+            if (basketX < 0) basketX = 0;
+            if (basketX > c.width - basketW) basketX = c.width - basketW;
+        }
+
+        function updateCatch() {
+            const ctxC = c.getContext('2d');
+            ctxC.clearRect(0, 0, c.width, c.height);
+
+            if (leftPressed && basketX > 0) basketX -= 6;
+            if (rightPressed && basketX < c.width - basketW) basketX += 6;
+
+            ctxC.fillStyle = "#5A7358";
+            ctxC.beginPath();
+            if (ctxC.roundRect) {
+                ctxC.roundRect(basketX, c.height - basketH - 10, basketW, basketH, 8);
+            } else {
+                ctxC.rect(basketX, c.height - basketH - 10, basketW, basketH);
+            }
+            ctxC.fill();
+
+            for (let i = fallingFlowers.length - 1; i >= 0; i--) {
+                let f = fallingFlowers[i];
+                f.y += f.speed;
+
+                ctxC.font = "20px serif";
+                ctxC.fillText(f.symbol, f.x, f.y);
+
+                if (f.y >= c.height - basketH - 22 && f.x >= basketX - 18 && f.x <= basketX + basketW + 10) {
+                    catchScore++;
+                    playChime(700);
+                    document.getElementById('catchScoreDisplay').innerText = `Skor: ${catchScore}`;
+                    fallingFlowers.splice(i, 1);
+
+                    if (catchScore >= 20) {
+                        clearInterval(spawnTimer);
+                        cancelAnimationFrame(catchAnimId);
+                        document.getElementById('catchSuccessMessage').classList.remove('hidden');
+                        burstPetals(30);
+                        return;
+                    }
+                } else if (f.y > c.height + 20) {
+                    fallingFlowers.splice(i, 1);
+                }
+            }
+
+            catchAnimId = requestAnimationFrame(updateCatch);
+        }
+
+        updateCatch();
+    }
+
+    /* Game Memory Matching */
+    const memoryIcons = ['🌸', '🌷', '💖', '🌙', '⭐', '🍀'];
+    let memoryCards = [];
+    let flippedCards = [];
+    let matchedPairs = 0;
+
+    function initMemoryGame() {
+        const grid = document.getElementById('memoryGrid');
+        grid.innerHTML = '';
+        flippedCards = [];
+        matchedPairs = 0;
+        document.getElementById('memorySuccess').classList.add('hidden');
+
+        memoryCards = [...memoryIcons, ...memoryIcons].sort(() => Math.random() - 0.5);
+
+        memoryCards.forEach((icon, idx) => {
+            const card = document.createElement('div');
+            card.className = "h-16 sm:h-20 bg-sage-200 border-2 border-sage-300 rounded-xl sm:rounded-2xl flex items-center justify-center text-xl sm:text-2xl cursor-pointer shadow-sm transition-all transform hover:scale-105 active:scale-95 select-none";
+            card.dataset.symbol = icon;
+            card.innerText = '🌿';
+            card.onclick = () => flipMemoryCard(card);
+            grid.appendChild(card);
+        });
+    }
+
+    function flipMemoryCard(card) {
+        if (flippedCards.length >= 2 || card.classList.contains('matched') || flippedCards.includes(card)) return;
+
+        card.innerText = card.dataset.symbol;
+        card.classList.replace('bg-sage-200', 'bg-white');
+        flippedCards.push(card);
+
+        if (flippedCards.length === 2) {
+            const [c1, c2] = flippedCards;
+            if (c1.dataset.symbol === c2.dataset.symbol) {
+                c1.classList.add('matched', 'border-goldAccent');
+                c2.classList.add('matched', 'border-goldAccent');
+                matchedPairs++;
+                playChime(600);
+                flippedCards = [];
+
+                if (matchedPairs === 6) {
+                    setTimeout(() => {
+                        document.getElementById('memorySuccess').classList.remove('hidden');
+                        burstPetals(30);
+                    }, 500);
+                }
+            } else {
+                setTimeout(() => {
+                    c1.innerText = '🌿';
+                    c2.innerText = '🌿';
+                    c1.classList.replace('bg-white', 'bg-sage-200');
+                    c2.classList.replace('bg-white', 'bg-sage-200');
+                    flippedCards = [];
+                }, 800);
+            }
+        }
+    }
+
+    /* Love Letters Game */
+    let openedEnvelopes = new Set();
+
+    function openEnvelope(id) {
+        const env = document.getElementById('env' + id);
+        const content = env.querySelector('.env-content');
+        const status = env.querySelector('.status-tag');
+
+        if (content.classList.contains('hidden')) {
+            content.classList.remove('hidden');
+            status.innerText = "Terbuka ✨";
+            env.classList.add('border-goldAccent', 'bg-sage-50/90');
+            openedEnvelopes.add(id);
+            playChime(500);
+            burstPetals(12);
+
+            const btn = document.getElementById('lettersNextBtn');
+            btn.innerText = `Buka Semua Amplop Dahulu (${openedEnvelopes.size}/4)`;
+
+            if (openedEnvelopes.size === 4) {
+                btn.disabled = false;
+                btn.className = "mt-4 sm:mt-6 w-full py-3.5 bg-sage-700 text-white font-bold text-xs sm:text-sm rounded-xl hover:bg-sage-800 transition shadow-md cursor-pointer active:scale-95";
+                btn.innerText = "Lanjut ke Cake Challenge 🎂";
+            }
+        }
+    }
+
+    /* Cake Challenge */
+    let candlesLit = false;
+
+    function changeCakeColor(color) {
+        const cake = document.getElementById('cakeBody');
+        cake.className = cake.className.replace(/bg-\w+-\d+/, '');
+        if (color === 'pink') cake.classList.add('bg-pink-200');
+        if (color === 'sage') cake.classList.add('bg-sage-200');
+        if (color === 'lavender') cake.classList.add('bg-purple-200');
+        if (color === 'cream') cake.classList.add('bg-amber-100');
+        playChime(450);
+    }
+
+    function toggleCakeFlowers() {
+        document.getElementById('cakeFlowers').classList.toggle('hidden');
+        playChime(550);
+    }
+
+    function setCakeName() {
+        document.getElementById('cakeNameText').innerText = "AZZA";
+        playChime(600);
+        checkCakeComplete();
+    }
+
+    function lightCakeCandles() {
+        document.querySelectorAll('.flame').forEach(f => f.classList.remove('hidden'));
+        candlesLit = true;
+        document.getElementById('cakeBanner').classList.remove('hidden');
+        burstPetals(30);
+        playChime(800);
+        checkCakeComplete();
+    }
+
+    function checkCakeComplete() {
+        if (candlesLit && document.getElementById('cakeNameText').innerText === "AZZA") {
+            const btn = document.getElementById('cakeNextBtn');
+            btn.disabled = false;
+            btn.className = "mt-4 sm:mt-6 w-full py-3.5 bg-sage-700 text-white font-bold text-xs sm:text-sm rounded-xl hover:bg-sage-800 transition shadow-md cursor-pointer active:scale-95";
+            btn.innerText = "Lanjut Mengumpulkan Hati 💚";
+        }
+    }
+
+    /* Heart Collector Game */
+    const heartWords = ['Happiness', 'Love', 'Health', 'Dreams', 'Memories', 'Joy', 'Hope', 'Blessings'];
+    let collectedHearts = 0;
+
+    function initHeartCollector() {
+        const playground = document.getElementById('heartPlayground');
+        playground.innerHTML = '';
+        collectedHearts = 0;
+        document.getElementById('heartCountText').innerText = "0/16";
+        document.getElementById('lastWordUnlocked').innerText = "Klik hati melayang!";
+        document.getElementById('heartSuccess').classList.add('hidden');
+
+        for (let i = 0; i < 16; i++) {
+            const heart = document.createElement('div');
+            heart.className = "absolute text-xl sm:text-2xl cursor-pointer transform transition hover:scale-125 active:scale-95 animate-bounce select-none";
+            heart.style.top = `${Math.random() * 65 + 10}%`;
+            heart.style.left = `${Math.random() * 80 + 5}%`;
+            heart.innerText = "💚";
+            
+            const word = heartWords[i % heartWords.length];
+            heart.onclick = () => collectHeart(heart, word);
+            playground.appendChild(heart);
+        }
+    }
+
+    function collectHeart(el, word) {
+        el.remove();
+        collectedHearts++;
+        document.getElementById('heartCountText').innerText = `${collectedHearts}/16`;
+        document.getElementById('lastWordUnlocked').innerText = `Kata Terbuka: "${word}" ✨`;
+        playChime(400 + collectedHearts * 25);
+
+        if (collectedHearts === 16) {
+            document.getElementById('heartSuccess').classList.remove('hidden');
+            burstPetals(40);
+        }
+    }
+
+    /* Final Surprise */
+    function triggerFinalGardenSurprise() {
+        burstPetals(90);
+        confetti({
+            particleCount: 120,
+            spread: 80,
+            origin: { y: 0.6 },
+            colors: ['#738F71', '#CBD9CA', '#FAF7F0', '#D4AF37']
+        });
+
+        const modal = document.getElementById('finalModal');
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        modal.querySelector('div').classList.replace('scale-95', 'scale-100');
+        playChime(880);
+    }
+
+    function closeFinalModal() {
+        const modal = document.getElementById('finalModal');
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        modal.querySelector('div').classList.replace('scale-100', 'scale-95');
+    }
+
+    /* Audio Backsound Control */
+    const bgMusic = document.getElementById('bgMusic');
+    const musicIcon = document.getElementById('musicIcon');
+    let isMusicPlaying = false;
+
+    function startMusic() {
+        initAudio();
+        bgMusic.volume = 0.4;
+        bgMusic.play().then(() => {
+            isMusicPlaying = true;
+            musicIcon.className = "fa-solid fa-music text-goldAccent animate-spin";
+        }).catch(err => {
+            console.log("Audio play error:", err);
+        });
+    }
+
+    function toggleMusic(e) {
+        if (e) e.stopPropagation();
+        initAudio();
+
+        if (isMusicPlaying) {
+            bgMusic.pause();
+            musicIcon.className = "fa-solid fa-volume-xmark text-sage-600";
+            isMusicPlaying = false;
+        } else {
+            startMusic();
+        }
+    }
+
+    // Otomatis putar musik saat user melakukan klik pertama di mana saja pada layar
+    document.addEventListener('click', function handleFirstInteraction() {
+        if (!isMusicPlaying) {
+            startMusic();
+        }
+        document.removeEventListener('click', handleFirstInteraction);
+    }, { once: true });
+</script>
+
+</body>
+</html>
